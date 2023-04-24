@@ -1,0 +1,61 @@
+<script>
+  var w2 = window.whistleBridge;
+  var showModal = w2.showModal;
+  var MAX_LEN = 100;
+
+  w2.addNetworkListener(function(options) {
+    if (options.name !== 'Set Comment') {
+      return;
+    }
+    var selectedList = options.selectedList;
+    var activeItem = options.activeItem;
+    if (options.activeList) {
+      selectedList = options.activeList;
+    } else if (activeItem && !activeItem.selected) {
+      selectedList = [activeItem];
+    }
+    var comment = '';
+    var body = [
+      '<h5>Enter a comment to associate with the selected Sessions:</h5>',
+      '<input maxlength="' + MAX_LEN + '" style="width: 430px;"',
+      'oninput="handleInput" onkeyup="handleKeyUp"',
+      'placeholder="Input a comment" class="form-control" />'
+    ];
+    var setComment = function() {
+        selectedList.forEach(function(item) {
+          item.customData = item.customData || {};
+          item.customData.comment = comment.substring(0, MAX_LEN);
+        });
+        comment = '';
+        hideModal();
+        w2.updateUI();
+      };
+    var hideModal = showModal({
+      width: 450,
+      title: 'Set Comment',
+      body: body.join('\n'),
+      footer: [
+      '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>',
+      '<button type="button" class="btn btn-primary" onclick="setComment" data-dismiss="modal">Set Comment</button>'
+      ].join('\n'),
+      onShow: function(dialog) {
+        try {
+          var input = dialog.container.find('input');
+          input.select();
+          input.focus();
+        } catch (e) {}
+      },
+      methods: {
+        handleInput: function(e) {
+          comment = e.target.value;
+        },
+        handleKeyUp: function(e) {
+          if (e.keyCode === 13) {
+            setComment();
+          }
+        },
+        setComment: setComment
+      }
+    });
+  });
+</script>

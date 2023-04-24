@@ -1,0 +1,20 @@
+{
+  "name": "whistle.comment",
+  "version": "1.0.0",
+  "description": "Set a comment to associate with the selected Sessions",
+  "whistleConfig": {
+    "networkColumn": {
+      "name": "Comments",
+      "width": 100,
+      "showTips": true,
+      "key": "customData.comment"
+    },
+    "networkMenus": [
+      {
+        "name": "Set Comment",
+        "page": "comment.html",
+        "requiredTreeNode": true
+      }
+    ]
+  }
+}
